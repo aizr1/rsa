@@ -2,19 +2,17 @@ package com.company;
 
 import java.util.Scanner;
 
-import static java.lang.System.*;
-
 public class Main {
 
     public static void main(String[] args) {
 
         //Eingabe von P und Q
-        out.println("Bitte erste Primzahl p eingeben.");
-        Scanner pscan = new Scanner(in);
+        System.out.println("Bitte erste Primzahl p eingeben.");
+        Scanner pscan = new Scanner(System.in);
         long p = pscan.nextLong();
 
-        out.println("Bitte erste Primzahl q eingeben.");
-        Scanner qscan = new Scanner(in);
+        System.out.println("Bitte erste Primzahl q eingeben.");
+        Scanner qscan = new Scanner(System.in);
         long q = qscan.nextLong();
 
         if (p == q){
@@ -22,21 +20,21 @@ public class Main {
         }
 
         // n berechnen
-        long n = p*q;
-        out.println("n = p * q = " + n);
+        long n = p * q;
+        System.out.println("n = p * q = " + n);
 
         //phi berechnen
         System.out.println("Testausgabe: phi(n)=(p-1)*(q-1)");
         System.out.println(phi(p,q));
 
         //Eingabe von der Nachricht M
-        out.println("Bitte Nachricht m eingeben.");
-        Scanner mscan = new Scanner(in);
+        System.out.println("Bitte Nachricht m eingeben.");
+        Scanner mscan = new Scanner(System.in);
         long m = mscan.nextLong();
 
         //Eingabe des Verschlüsselungsschlüssel
-        out.println("Bitte Verschlüsselungsschlüssel c eingeben.");
-        Scanner cscan = new Scanner(in);
+        System.out.println("Bitte Verschlüsselungsschlüssel c eingeben.");
+        Scanner cscan = new Scanner(System.in);
         long c = cscan.nextLong();
         
         //Ist der Verschlüsselungsschlüssel C richtig gewählt?
@@ -75,7 +73,7 @@ public class Main {
                 b = b - a;
             }
         }
-        
+
         if (a == 1) return true;
         else return false;
     }
