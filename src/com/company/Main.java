@@ -15,7 +15,7 @@ public class Main {
         Scanner qscan = new Scanner(System.in);
         long q = qscan.nextLong();
 
-        if (p == q){
+        if (p == q) {
             System.out.println("P darf != Q sein! Bitte Programm neustarten.");
         }
 
@@ -25,7 +25,7 @@ public class Main {
 
         //phi berechnen
         System.out.println("Testausgabe: phi(n)=(p-1)*(q-1)");
-        System.out.println(phi(p,q));
+        System.out.println(phi(p, q));
 
         //Eingabe von der Nachricht M
         System.out.println("Bitte Nachricht m eingeben.");
@@ -36,24 +36,34 @@ public class Main {
         System.out.println("Bitte Verschlüsselungsschlüssel c eingeben.");
         Scanner cscan = new Scanner(System.in);
         long c = cscan.nextLong();
-        
+
         //Ist der Verschlüsselungsschlüssel C richtig gewählt?
-        if(3<=c && c<phi(p,q)){
-            if (isTeilerfremd(c, phi(p, q))){
+        if (3 <= c && c < phi(p, q)) {
+            if (isTeilerfremd(c, phi(p, q))) {
                 System.out.println("C kann verwendet werden, da 3 <= C < PHI und C, PHI teilerfremd sind.");
             } else System.out.println("C kann nicht verwendet werden, Programm neustarten.");
         }
 
         //Nachricht verschlüsseln und ausgeben.
         System.out.println("Verschlüsselte Nachricht:");
-        System.out.println(crypt(m,c,n));
+        System.out.println(crypt(m, c, n));
 
         //Nachricht entschlüsseln
         //Zuerst Entschlüsselungsschlüssel d berechnen.
         long d = 1;
-        while (c * d != 1 % phi(p,q)){
+        while (c * d != 1 % phi(p, q)) {
             d++;
         }
+
+        // Entswchlüsselte Nachricht e berechnen.
+        long e = 1;
+        //m=crypt(m) pow d mod n
+        for (int i = 1; i <= e; i++){
+            e = crypt(m, c, n) * m % n;
+        }
+        System.out.println("Das ist die Entschlüsselte Nachricht");
+        System.out.println(e);
+        System.out.println("Zum Vergleich m: " + m);
     }
 
     private static long phi(long p, long q){
@@ -86,10 +96,14 @@ public class Main {
         }
         return v;
     }
+/*
+    private static long decrypt(long m, long d, long n){
+        long e = crypt(m,d,n);
+        for (int i = 1; i<=d; i++){
+            e = e * m % n;
+            //m=crypt(m) pow d mod n
 
-    private static long decrypt(){
-        //m=v(m) pow d mod n
-
+        }
     }
-
+*/
 }
