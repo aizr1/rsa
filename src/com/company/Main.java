@@ -4,28 +4,40 @@ import java.util.Scanner;
 
 public class Main {
 
+    public long m, p ,q, n, e, v, decryptKey = 1;
+
     public static void main(String[] args) {
 
         //Eingabe von P und Q
         System.out.println("Bitte erste Primzahl p eingeben.");
         Scanner pscan = new Scanner(System.in);
         long p = pscan.nextLong();
+        if (isPrim(p)){
+            System.out.println("P ist eine Primzahl");
+        } else {
+            System.out.println("P ist keine Primzahl. Programm stoppt.");
+            System.exit(1);
+        }
 
         System.out.println("Bitte erste Primzahl q eingeben.");
         Scanner qscan = new Scanner(System.in);
         long q = qscan.nextLong();
-
+        if (isPrim(q)){
+            System.out.println("Q ist eine Primzahl");
+        } else {
+            System.out.println("Q ist keine Primzahl. Programm stoppt.");
+            System.exit(1);
+        }
         if (p == q) {
-            System.out.println("P darf != Q sein! Bitte Programm neustarten.");
+            System.out.println("P darf nicht (!=) Q sein! Bitte Programm neustarten.");
         }
 
         // n berechnen
         long n = p * q;
-        System.out.println("n = p * q = " + n);
+        System.out.println("Testausgabe: n = p * q = " + n);
 
         //phi berechnen
-        System.out.println("Testausgabe: phi(n)=(p-1)*(q-1)");
-        System.out.println(phi(p, q));
+        System.out.println("Testausgabe: phi(n)=(p-1)*(q-1)" + phi(p, q));
 
         //Eingabe von der Nachricht M
         System.out.println("Bitte Nachricht m eingeben.");
@@ -41,29 +53,31 @@ public class Main {
         if (3 <= c && c < phi(p, q)) {
             if (isTeilerfremd(c, phi(p, q))) {
                 System.out.println("C kann verwendet werden, da 3 <= C < PHI und C, PHI teilerfremd sind.");
-            } else System.out.println("C kann nicht verwendet werden, Programm neustarten.");
+            } else {
+                System.out.println("C kann nicht verwendet werden, Programm neustarten.");
+                System.exit(1);
+            }
         }
 
         //Nachricht verschlüsseln und ausgeben.
         System.out.println("Verschlüsselte Nachricht:");
-        System.out.println(crypt(m, c, n));
+        long mCrypt = crypt(m, c, n);
+        System.out.println(mCrypt);
 
         //Nachricht entschlüsseln
         //Zuerst Entschlüsselungsschlüssel d berechnen.
-        long d = 1;
-        while (c * d != 1 % phi(p, q)) {
-            d++;
+        System.out.println("Verschlüsselungsschlüssel d berechnen...");
+        long decryptKey = 1;
+        while ((c * decryptKey) % phi(p, q) == 1) {
+            decryptKey++;
+            System.out.print(decryptKey + "...");
         }
 
-        // Entswchlüsselte Nachricht e berechnen.
-        long e = 1;
-        //m=crypt(m) pow d mod n
-        for (int i = 1; i <= e; i++){
-            e = crypt(m, c, n) * m % n;
-        }
-        System.out.println("Das ist die Entschlüsselte Nachricht");
-        System.out.println(e);
-        System.out.println("Zum Vergleich m: " + m);
+        System.out.println();
+
+        System.out.println("Entschlüsselte Nachricht:");
+        long mDecrypt = decrypt(m,decryptKey,n);
+        System.out.println(mDecrypt);
     }
 
     private static long phi(long p, long q){
@@ -84,8 +98,7 @@ public class Main {
             }
         }
 
-        if (a == 1) return true;
-        else return false;
+        return a == 1;
     }
 
     private static long crypt(long m, long c, long n){
@@ -96,14 +109,23 @@ public class Main {
         }
         return v;
     }
-/*
-    private static long decrypt(long m, long d, long n){
-        long e = crypt(m,d,n);
-        for (int i = 1; i<=d; i++){
-            e = e * m % n;
-            //m=crypt(m) pow d mod n
-
+    private static long decrypt(long m, long decryptKey, long n){
+        long encryptedMessage = crypt(m,decryptKey,n);
+        for (int i = 1; i<=decryptKey; i++){
+            encryptedMessage = encryptedMessage * m % n; //m=crypt(m) pow d mod n
         }
+        return encryptedMessage;
     }
-*/
+
+    private static boolean isPrim(final long value) {
+        if (value <= 2) {
+            return (value == 2);
+        }
+        for (long i = 2; i * i <= value; i++) {
+            if (value % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
