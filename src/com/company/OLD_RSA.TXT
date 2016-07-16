@@ -1,7 +1,7 @@
 package com.company;
 
 /**
- * Created by theo on 16.07.16.
+ * Created by xyz on 16.07.16.
  */
 
 import java.math.BigInteger;
@@ -39,7 +39,6 @@ public class Main {
         }
         if (p == q) {
             out.println("P darf nicht (!=) Q sein! Bitte Programm neustarten.");
-            System.exit(1);
         }
 
         // n berechnen
@@ -47,7 +46,7 @@ public class Main {
         System.out.println("Testausgabe: n = p * q = " + n);
 
         //phi berechnen
-        System.out.println("Testausgabe: phi(n)=(p-1)*(q-1) = " + phi(p, q));
+        System.out.println("Testausgabe: phi(n)=(p-1)*(q-1)" + phi(p, q));
 
         //Eingabe von der Nachricht M
         System.out.println("Bitte Nachricht m eingeben.");
@@ -70,15 +69,9 @@ public class Main {
                 System.exit(1);
             }
         }
-
-        //Verschlüsselung
-        System.out.println("Verschlüsselte Nachricht:");
-        System.out.println(crypt(message,c,n));
-
-        //Entschlüsselung
-        System.out.println("Entschlüsselte Nachricht");
-        System.out.println(decrypt(message,getDecryptKey(),n));
     }
+
+
 
     private static boolean isPrim(final long value) {
         if (value <= 2) {
@@ -122,44 +115,23 @@ public class Main {
         v(m) = m^c mod n
         v = m^c mod n
          */
-        long v = 0;
-        for (int i = 1; i <= cryptKey; i++){ //MOD besonders oft auf v anweden
-           v = potenz(message, cryptKey) % n;
-        }
-        return v;
+        return potenz(message, cryptKey) % n;
     }
 
     private static long decrypt(long message, long decryptKey, long n){
-        long e = 0;
-        for (int i = 1; i <= decryptKey; i++){
-            e = crypt(message,decryptKey,n) * decryptKey  % n;
-        }
-        return e;
+        /*
+        m = v(m)d mod n
+         */
+        decryptKey = getDecryptKey();
+        return crypt(message,decryptKey,n) * decryptKey  % n;
     }
 
     private static long getDecryptKey(){
         long d = 1;
-        /*
-        Was läuft hier falsch?
-
         for (;true;d++){
             System.out.println(d);
             System.out.println("Entschlüsselungsschlüssel generieren...");
-            if ((c*d)%phi(p,q) != 1) {
-                break;
-            }
-        }
-        */
-
-        /*
-        while ((c*d)%phi(p,q) != 1){
-            System.out.println("Generieren... " + d);
-            d++;
-        }
-        */
-        for (;true;d++) {
-            System.out.println("Generieren... " + d);
-            if ((c*d)%phi(p,q) != 1) {
+            if ((c*d)%phi(p,q) == 1) {
                 break;
             }
         }
