@@ -61,7 +61,7 @@ public class Main {
 
         //Nachricht verschlüsseln und ausgeben.
         System.out.println("Verschlüsselte Nachricht:");
-        long mCrypt = crypt(m, c, n);
+        long mCrypt = crypt(m, c, n); //Ausgabe der Methode crypt wird an mCrypt (Verschlüsselte Nachricht) übergeben.
         System.out.println(mCrypt);
 
         //Nachricht entschlüsseln
@@ -104,7 +104,7 @@ public class Main {
     private static long crypt(long m, long c, long n){
         long v = 1;
         for (int i=1; i<=c; i++){
-            v = v * m % n; //Potenzieren nach der klassichen Art notwendig. Math.pow wird aufgrund der größe der Zahlen nicht funktionieren.
+            v = (v * m) % n; //Potenzieren nach der klassichen Art notwendig. Math.pow wird aufgrund der größe der Zahlen nicht funktionieren.
             //modulo sorgt für n-1 kleine zahlen...
         }
         return v;

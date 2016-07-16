@@ -1,0 +1,51 @@
+Berechnen Sie
+
+	v(m) = mc mod n
+
+Nutzen Sie dabei aus, dass gilt:
+
+	mc mod n = (m mod n)c mod n
+
+Damit ist die Nachricht verschlüsselt. Geben Sie v(m) aus.
+
+Es folgt die Entschlüsselung von v(m) .
+Berechnen Sie den Entschlüsselungsschlüssel d .
+Für d muss
+
+	c * d = 1 mod phi	( Java-Notation: c * d % phi == 1 )
+
+gelten. Beginnen Sie mit d = 1 . Solange die Bedingung nicht erfüllt ist, solange also
+
+	c * d % phi != 1
+
+gilt, erhöhen Sie d um 1 . Testen Sie wieder usw. Nun liege d vor.
+Berechnen Sie
+
+	m = v(m)d mod n
+
+Vermeiden Sie wieder durch Mehrfachverwendung von mod , dass zu große Zahlen entstehen.
+Geben Sie m aus. Der Wert sollte mit der ursprünglichen Zahl m identisch sein.
+
+Verbesserung des Programmes: Berechnen Sie c , statt es einzugeben.
+
+Beginnen Sie mit c = 3 . Prüfen Sie, ob c und phi teilerfremd sind
+(PAP oder Struktogramm dazu entwerfen, dann erst programmieren).
+Falls ja, dann wird c verwendet.
+Falls nein, dann wird c um 1 erhöht und wieder getestet usw.
+
+
+Noch besser: Berechnen Sie alle Lösungen für c . Wählen Sie zufällig eine aus.
+
+Angenommen, es gibt k potenziell mögliche in einem Vektor w gespeicherte Werte
+w[1], ..., w[k] , die als c in Frage kommen.
+Bestimmen Sie eine Zufallszahl z ∈ [0,1) (Datentyp von z : double ) durch den Aufruf
+
+	z = Math.random() .
+
+Teilen Sie [0,1) in k gleich große Abschnitte der Länge 1/k .
+Bestimmen Sie die Nummer l desjenigen Abschnittes, in dem sich z befindet.
+Setzen Sie
+
+	c = w(l) .
+
+Damit ist c zufällig ausgewählt - in Abhängigkeit davon, in welches Teil-Intervall mit der Nummer l der relle Wert z gefallen ist.
