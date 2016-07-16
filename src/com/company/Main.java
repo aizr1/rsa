@@ -1,39 +1,39 @@
 package com.company;
 
+import java.math.BigInteger;
 import java.util.Scanner;
 
-public class Main {
-
-    public long m, p ,q, n, e, v, decryptKey = 1;
+class Main {
+    //Variablen deklarieren.
+    private BigInteger msg, p, q, n, e, decryptKey;
 
     public static void main(String[] args) {
-
         //Eingabe von P und Q
         System.out.println("Bitte erste Primzahl p eingeben.");
         Scanner pscan = new Scanner(System.in);
-        long p = pscan.nextLong();
+        BigInteger p = pscan.nextBigInteger();
         if (isPrim(p)){
             System.out.println("P ist eine Primzahl");
         } else {
             System.out.println("P ist keine Primzahl. Programm stoppt.");
-            System.exit(1);
+            System.exit(1); //Programm beenden
         }
 
         System.out.println("Bitte erste Primzahl q eingeben.");
         Scanner qscan = new Scanner(System.in);
-        long q = qscan.nextLong();
+        BigInteger q = qscan.nextBigInteger();
         if (isPrim(q)){
             System.out.println("Q ist eine Primzahl");
         } else {
             System.out.println("Q ist keine Primzahl. Programm stoppt.");
-            System.exit(1);
+            System.exit(1); //Programm beenden
         }
-        if (p == q) {
+        if (p.equals(q)) {
             System.out.println("P darf nicht (!=) Q sein! Bitte Programm neustarten.");
         }
 
         // n berechnen
-        long n = p * q;
+        BigInteger n = p.intValue() * q.intValue();
         System.out.println("Testausgabe: n = p * q = " + n);
 
         //phi berechnen
@@ -42,52 +42,55 @@ public class Main {
         //Eingabe von der Nachricht M
         System.out.println("Bitte Nachricht m eingeben.");
         Scanner mscan = new Scanner(System.in);
-        long m = mscan.nextLong();
+        BigInteger msg = mscan.nextBigInteger();
 
         //Eingabe des Verschlüsselungsschlüssel
         System.out.println("Bitte Verschlüsselungsschlüssel c eingeben.");
         Scanner cscan = new Scanner(System.in);
-        long c = cscan.nextLong();
+        BigInteger c = cscan.nextBigInteger();
 
         //Ist der Verschlüsselungsschlüssel C richtig gewählt?
         if (3 <= c && c < phi(p, q)) {
             if (isTeilerfremd(c, phi(p, q))) {
-                System.out.println("C kann verwendet werden, da 3 <= C < PHI und C, PHI teilerfremd sind.");
+                System.out.println("Verschlüsselungsschlüssel kann verwendet werden, da 3 <= C < PHI und C, PHI teilerfremd sind.");
             } else {
-                System.out.println("C kann nicht verwendet werden, Programm neustarten.");
+                System.out.println("C: " + c + " ...kann nicht verwendet werden, Programm neustarten.");
                 System.exit(1);
             }
         }
 
         //Nachricht verschlüsseln und ausgeben.
         System.out.println("Verschlüsselte Nachricht:");
-        long mCrypt = crypt(m, c, n); //Ausgabe der Methode crypt wird an mCrypt (Verschlüsselte Nachricht) übergeben.
+        BigInteger mCrypt = crypt(msg, c, n); //Ausgabe der Methode crypt wird an mCrypt (Verschlüsselte Nachricht) übergeben.
         System.out.println(mCrypt);
 
         //Nachricht entschlüsseln
         //Zuerst Entschlüsselungsschlüssel d berechnen.
         System.out.println("Verschlüsselungsschlüssel d berechnen...");
-        long decryptKey = 1;
-        while ((c * decryptKey) % phi(p, q) == 1) {
-            decryptKey++;
-            System.out.print(decryptKey + "...");
+        BigInteger decryptKey = 1;
+
+        for (;true; decryptKey++){
+            System.out.println(decryptKey);
+            if ((c*decryptKey) % phi(p,q) == 1) {
+                break;
+            }
         }
 
         System.out.println();
 
         System.out.println("Entschlüsselte Nachricht:");
-        long mDecrypt = decrypt(m,decryptKey,n);
+        BigInteger mDecrypt = decrypt(msg,decryptKey,n);
         System.out.println(mDecrypt);
     }
 
-    private static long phi(long p, long q){
+    private static BigInteger phi(BigInteger p, BigInteger q){
         //phi(n)=(p-1)*(q-1)
-        long z;
+        BigInteger z;
         z = (q - 1) * (p - 1);
         return z;
     }
 
-    private static boolean isTeilerfremd(long a, long b){
+    private static boolean isTeilerfremd(BigInteger a, BigInteger b){
         
         //ggt berechnen & so überprüfen ob das ganze teilerfremd ist.
         while (b != 0){
@@ -101,31 +104,51 @@ public class Main {
         return a == 1;
     }
 
-    private static long crypt(long m, long c, long n){
-        long v = 1;
-        for (int i=1; i<=c; i++){
-            v = (v * m) % n; //Potenzieren nach der klassichen Art notwendig. Math.pow wird aufgrund der größe der Zahlen nicht funktionieren.
-            //modulo sorgt für n-1 kleine zahlen...
-        }
-        return v;
+
+    private static BigInteger crypt(BigInteger msg, BigInteger c, BigInteger n){
+        BigInteger modulo = new BigInteger(""+n);
+        BigInteger temp = null;
+        temp = Main.potenz(msg,c);
+        return temp.remainder(modulo); //encryptedMessage
+        /*
+        v(m) = m^c mod n
+        v = m^c mod n
+         */
     }
-    private static long decrypt(long m, long decryptKey, long n){
-        long encryptedMessage = crypt(m,decryptKey,n);
-        for (int i = 1; i<=decryptKey; i++){
-            encryptedMessage = encryptedMessage * m % n; //m=crypt(m) pow d mod n
-        }
-        return encryptedMessage;
+    private static BigInteger decrypt(BigInteger m, BigInteger decryptKey, BigInteger n){
+        BigInteger encryptedMessage = new BigInteger(""+crypt(m,decryptKey,n));
+        BigInteger modulo = new BigInteger(""+n);
+        BigInteger temp = null;
+        temp = BigInteger.valueOf(Main.potenz(encryptedMessage.longValue(),decryptKey));
+        return temp.remainder(modulo);
     }
 
-    private static boolean isPrim(final long value) {
+    private static boolean isPrim(final BigInteger value) {
         if (value <= 2) {
             return (value == 2);
         }
-        for (long i = 2; i * i <= value; i++) {
+        for (BigInteger i = 2; i * i <= value; i++) {
             if (value % i == 0) {
                 return false;
             }
         }
         return true;
     }
+
+    private BigInteger getRandomC() { //C berechnen.
+        BigInteger cryptKey =  3;
+        while (isTeilerfremd(cryptKey,phi(p,q))){
+            cryptKey++;
+        }
+        return cryptKey;
+    }
+
+    private static BigInteger potenz(BigInteger basis, BigInteger exponent) {
+        BigInteger x = basis;
+        for (int j = 1; j < exponent.intValue(); j++) {
+            x = basis;
+        }
+        return x;
+    }
+
 }
