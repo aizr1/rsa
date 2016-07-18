@@ -87,8 +87,11 @@ public class Main {
         System.out.println("vm = " + vm);
 
         //Entschlüsselung
-        System.out.println("Entschlüsselte Nachricht");
-        System.out.println(decrypt(vm,n));
+        System.out.println("Entschlüsseln...");
+        decrypt(vm, n);
+        System.out.println();
+        System.out.println("Entschlüsselte Nachricht: " + m);
+
     }
     private static boolean isPrim(final long value) {
         if (value <= 2) {
@@ -146,8 +149,34 @@ public class Main {
         long m = 1;
         for (long i = 1; i < (d+1); i++){
             m = (m * vm) % n;
-            System.out.print(m+", ");
+            System.out.print(m+"_");
         }
         return m;
+    }
+
+    private static void getRandomCryptKey(){
+        /*
+        Beginnen Sie mit c = 3 . Prüfen Sie, ob c und phi teilerfremd sind
+(PAP oder Struktogramm dazu entwerfen, dann erst programmieren).
+Falls ja, dann wird c verwendet.
+Falls nein, dann wird c um 1 erhöht und wieder getestet usw.
+
+
+Noch besser: Berechnen Sie alle Lösungen für c . Wählen Sie zufällig eine aus.
+
+Angenommen, es gibt k potenziell mögliche in einem Vektor w gespeicherte Werte
+w[1], ..., w[k] , die als c in Frage kommen.
+Bestimmen Sie eine Zufallszahl z ∈ [0,1) (Datentyp von z : double ) durch den Aufruf
+
+	z = Math.random() .
+
+Teilen Sie [0,1) in k gleich große Abschnitte der Länge 1/k .
+Bestimmen Sie die Nummer l desjenigen Abschnittes, in dem sich z befindet.
+Setzen Sie
+
+	c = w(l) .
+
+Damit ist c zufällig ausgewählt - in Abhängigkeit davon, in welches Teil-Intervall mit der Nummer l der relle Wert z gefallen ist.
+         */
     }
 }
