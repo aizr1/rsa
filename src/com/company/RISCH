@@ -1,0 +1,225 @@
+package rsa_verfahren;
+
+import java.io.*;
+import Prog1Tools.IOTools;
+
+
+public class RSA_Verfahren {
+
+
+
+
+	 public static long ggt(long a, long b) {
+		 long r;
+
+
+		while (!((a==0) || (b==0)))
+		{
+
+
+			if (a>b)
+			{
+				a=a-b;
+
+			}
+			else
+			{
+				b=b-a;
+
+			}
+
+		}
+
+
+		if (a>b)
+		{
+			r=a;
+		}
+		else
+		{
+			r=b;
+		}
+		return r;
+
+	 }
+
+
+
+
+   public static void main(String[] args) {
+	   // TODO Auto-generated method stub
+
+	   long m;          //Nachricht
+	   long p, q;       //Primzahlen
+	   long n;          //öffentlicher Schlüssel
+	   long phi;        //(p-1)*(q-1)
+	   long c;           //Verschlüsselungsschlüssel
+	   long d=1;           //Entschlüsselungsschlüssel
+	   long v=1;           //verschlüsselte Nachricht
+	   boolean primzahl;
+	   long tf=0;
+
+
+System.out.println("primzahl");
+
+
+	 System.out.println("-----RSA-Verschlüsselung-----");
+
+
+	do
+	{
+		primzahl=true;
+		System.out.println("Eingabe p:");      //Primzahl p
+		p = IOTools.readLong();
+
+		for (long i=2;i<p;i++)
+		{
+			tf = p % i;
+			if (tf==0)
+			{
+				primzahl=false;
+			}
+		}
+			if (p<3)
+			{
+				primzahl=false;
+			}
+
+		System.out.println("Primzahl?"+primzahl);
+	}
+	while (primzahl==false);
+
+
+
+
+	do
+	{
+		primzahl=true;
+		 System.out.println("Eingabe q:");      //Primzahl q
+		 q = IOTools.readLong();
+
+		for (long i=2;i<q;i++)
+		{
+			tf = q % i;
+			if (tf==0)
+			{
+				primzahl=false;
+			}
+		}
+			if (q<3)
+			{
+				primzahl=false;
+			}
+
+		System.out.println("Primzahl?"+primzahl);
+	}
+	while (primzahl==false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	 n=p*q;                                                  //öffentlicher Schlüssel
+	 System.out.println("RSA-Modul n= " +n);
+
+	 phi=(p-1)*(q-1);                                       //Berechnung und Ausgabe phi(n)
+	 System.out.println("phi("+n+")= " + phi);
+
+
+	// System.out.println("Eingabe Verschlüsselungsschlüssel c (c zwischen 3 und " +(phi-1)+" ):");     //Eingabe c
+	 //c= IOTools.readLong();
+	 int l=0;
+	 int k=10000;
+	 long[] w = new long[k];
+	 double z;
+	 z = Math.random();
+
+	 c=3;
+
+	for (int i=1;i<k;i++)
+	{
+
+	 while (ggt(phi,c) != 1)
+	 {
+		 c = c + 1;
+	 }
+	 System.out.println("Berechnetes c:" +c);
+
+	w[i]=c;
+	c=c+1;
+	l=l+1;
+   }
+	 System.out.println("Ausgabe Vektor:"+l);
+
+	 int x=1;
+	while (x*1./l<=z)
+	{
+		c=w[x];
+		x=x+1;
+	}
+	System.out.println("Ausgabe z:"+z);
+	System.out.println("Ausgabe c:"+c);
+
+
+
+
+
+
+
+
+	 System.out.println("Eingabe m (zu verschlüsselnde Zahl):");              //Eingabe m
+	 m= IOTools.readLong();
+
+
+	for (long i=1; i<(c+1); i++)  //v=1 1*1 mod 21 = 1      2mod 21=2   6mod21=6 24mod21=3     120mod21=15   120*6mod21=720mod  720*7mod21
+	{
+		v = (v * m) % n;
+
+	}
+	System.out.println("Ausgabe v:" +v );
+
+
+
+	while (c * d % phi != 1)    //Entschlüsselungsschlüssel
+	{
+		d=d+1;
+	}
+
+	 System.out.println("Ausgabe Entschlüsselungsschlüssel d:" +d);
+
+	                                                  //m = v(m)^d mod n
+	 m=1;
+	 for (long i=1; i<(d+1); i++)
+	 {
+
+		 m = (m * v) % n;
+	 }
+
+	 System.out.println("Ausgabe Originalnachricht:" +m);
+
+
+
+   }
+
+
+
+
+
+
+
+
+}
